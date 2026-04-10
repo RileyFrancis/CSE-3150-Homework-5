@@ -1,0 +1,43 @@
+# Compiler settings
+CXX = g++
+CXXFLAGS = -std=c++17 -Wall -Wextra -g
+
+# SDL2 flags - automatically detected
+SDL2_CFLAGS = $(shell pkg-config --cflags sdl2 SDL2_ttf)
+SDL2_LIBS = $(shell pkg-config --libs sdl2 SDL2_ttf)
+
+# Target executable
+TARGET = gui
+
+# Source files
+SOURCES = gui.cpp
+
+# Default target - builds the GUI executable
+all: $(TARGET)
+
+# Build GUI version with SDL2
+$(TARGET): $(SOURCES)
+	$(CXX) $(CXXFLAGS) $(SDL2_CFLAGS) $(SOURCES) $(SDL2_LIBS) -o $(TARGET)
+
+# Clean build artifacts
+clean:
+	rm -f $(TARGET)
+
+# Run the GUI game
+run: $(TARGET)
+	./$(TARGET)
+
+# Check if SDL2 is installed
+check-sdl:
+	@pkg-config --exists sdl2 SDL2_ttf || \
+		(echo "SDL2 not found. Install with:" && \
+		 echo "  Fedora: sudo dnf install SDL2-devel SDL2_ttf-devel" && \
+		 echo "  Ubuntu/Debian: sudo apt-get install libsdl2-dev libsdl2-ttf-dev" && \
+		 echo "  macOS: brew install sdl2 sdl2_ttf" && \
+		 exit 1)
+	@echo "SDL2 is installed!"
+	@echo "SDL2 CFLAGS: $(SDL2_CFLAGS)"
+	@echo "SDL2 LIBS: $(SDL2_LIBS)"
+
+# Phony targets (not actual files)
+.PHONY: all clean run check-sdl
