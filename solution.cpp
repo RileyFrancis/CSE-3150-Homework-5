@@ -30,7 +30,7 @@ std::vector<int> compress_row(const std::vector<int>& row) {
 // TODO: Merge a row (assumes already compressed)
 std::vector<int> merge_row(std::vector<int> row) {
     // TODO: Implement merging logic - combine adjacent equal tiles
-    for (int i = 1; i < row.size(); i++) {
+    for (int i = 1; i < int(row.size()); i++) {
         if (row[i-1] == row[i]) {
             row[i] *= 2;
             row[i-1] = 0;
@@ -91,7 +91,7 @@ void print_board(const vector<vector<int>>& board) {
     // TODO: Use dots (.) for empty cells (value 0)
     // TODO: Use tabs (\t) to separate values for alignment
 
-    for (const vector<int> row : board) {
+    for (const vector<int> &row : board) {
         string line = "";
         for (const int cell : row) {
             if (cell == 0)
@@ -281,6 +281,7 @@ int main(){
         if (moved) {
             // TODO: Push the previous board state to history stack
             // Use: history.push(prev)
+            history.push(prev);
 
             // Write board after merge but before spawn
             write_board_csv(board, false, "merge");
